@@ -2,14 +2,14 @@
 
 [中文](README.md) | [English](README.en.md)
 
-This is the public distribution repository for APK Canary. It publishes standalone Linux and macOS CLIs, a JVM fallback, SHA-256 checksums, and one APK analysis Skill compatible with both Codex and Hermes Agent.
+This is the public distribution repository for APK Canary. It publishes standalone Linux and macOS CLIs, SHA-256 checksums, and one APK analysis Skill compatible with both Codex and Hermes Agent.
 
 APK Canary reads an APK together with the matching `mapping.txt` and numeric-ID `R.txt`, then emits versioned compact JSON for agents and CI. It covers the manifest, ZIP entries, DEX, resources, assets, PNG files, native libraries, duplicate content, baseline changes, and budget gates. It does not generate HTML or embed product-specific report interpretation in CI.
 
 ## Current release
 
 - Version: `1.4.0-alpha.2`
-- Source commit: `2ddeac4eba9956aefa5f0dd5f06d2566f10d4175`
+- Source commit: `68426661d9bf55507ec5ffb9a8f1c439255dc051`
 - Release: [`v1.4.0-alpha.2`](https://github.com/HelloVass/apk-canary/releases/tag/v1.4.0-alpha.2)
 - Checksums: [`SHA256SUMS`](https://github.com/HelloVass/apk-canary/releases/download/v1.4.0-alpha.2/SHA256SUMS)
 
@@ -20,7 +20,6 @@ APK Canary reads an APK together with the matching `mapping.txt` and numeric-ID 
 | Linux | x86_64 | `apk-canary-1.4.0-alpha.2-linux-x86_64.tar.gz` |
 | macOS | Intel | `apk-canary-1.4.0-alpha.2-darwin-x86_64.tar.gz` |
 | macOS | Apple Silicon | `apk-canary-1.4.0-alpha.2-darwin-arm64.tar.gz` |
-| Any Java 17-capable system | JVM | `apk-canary-1.4.0-alpha.2-jvm.tar` |
 
 The standalone CLI does not require a local JDK, Android SDK, AAPT2, or `apkanalyzer`.
 

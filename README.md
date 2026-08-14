@@ -2,14 +2,14 @@
 
 [中文](README.md) | [English](README.en.md)
 
-这是 APK Canary 的公开分发仓库。这里发布可独立运行的 Linux、macOS CLI、JVM 兼容包、SHA-256 清单，以及同时兼容 Codex 与 Hermes Agent 的 APK 分析 Skill。
+这是 APK Canary 的公开分发仓库。这里发布可独立运行的 Linux、macOS CLI、SHA-256 清单，以及同时兼容 Codex 与 Hermes Agent 的 APK 分析 Skill。
 
 APK Canary 读取 APK、同次构建的 `mapping.txt` 和带数字资源 ID 的 `R.txt`，生成适合 Agent 与 CI 消费的版本化紧凑 JSON。它覆盖 Manifest、ZIP 文件、DEX、资源、assets、PNG、Native Library、重复内容、基线变化和预算门禁；不生成 HTML，也不会在 CI 中替产品解释报告。
 
 ## 当前版本
 
 - Version: `1.4.0-alpha.2`
-- Source commit: `2ddeac4eba9956aefa5f0dd5f06d2566f10d4175`
+- Source commit: `68426661d9bf55507ec5ffb9a8f1c439255dc051`
 - Release: [`v1.4.0-alpha.2`](https://github.com/HelloVass/apk-canary/releases/tag/v1.4.0-alpha.2)
 - Checksums: [`SHA256SUMS`](https://github.com/HelloVass/apk-canary/releases/download/v1.4.0-alpha.2/SHA256SUMS)
 
@@ -20,7 +20,6 @@ APK Canary 读取 APK、同次构建的 `mapping.txt` 和带数字资源 ID 的 
 | Linux | x86_64 | `apk-canary-1.4.0-alpha.2-linux-x86_64.tar.gz` |
 | macOS | Intel | `apk-canary-1.4.0-alpha.2-darwin-x86_64.tar.gz` |
 | macOS | Apple Silicon | `apk-canary-1.4.0-alpha.2-darwin-arm64.tar.gz` |
-| 任意支持 Java 17 的系统 | JVM | `apk-canary-1.4.0-alpha.2-jvm.tar` |
 
 独立 CLI 不要求本机安装 JDK、Android SDK、AAPT2 或 `apkanalyzer`。
 
