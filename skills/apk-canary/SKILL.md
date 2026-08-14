@@ -37,7 +37,7 @@ Use this Skill for APK size, DEX, resources, assets, PNG, native libraries, mapp
 Prefer a pinned GitHub Release and verify `SHA256SUMS`. Run:
 
 ```shell
-scripts/install-cli.sh 1.4.0-alpha.2 build/tools/apk-canary
+scripts/install-cli.sh 1.4.0-alpha.3 build/tools/apk-canary
 build/tools/apk-canary/apk-canary --version
 ```
 

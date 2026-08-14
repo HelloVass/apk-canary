@@ -8,18 +8,18 @@ APK Canary 读取 APK、同次构建的 `mapping.txt` 和带数字资源 ID 的 
 
 ## 当前版本
 
-- Version: `1.4.0-alpha.2`
-- Source commit: `68426661d9bf55507ec5ffb9a8f1c439255dc051`
-- Release: [`v1.4.0-alpha.2`](https://github.com/HelloVass/apk-canary/releases/tag/v1.4.0-alpha.2)
-- Checksums: [`SHA256SUMS`](https://github.com/HelloVass/apk-canary/releases/download/v1.4.0-alpha.2/SHA256SUMS)
+- Version: `1.4.0-alpha.3`
+- Source commit: `84733b521845c9663b3f0ded360e0513871569ee`
+- Release: [`v1.4.0-alpha.3`](https://github.com/HelloVass/apk-canary/releases/tag/v1.4.0-alpha.3)
+- Checksums: [`SHA256SUMS`](https://github.com/HelloVass/apk-canary/releases/download/v1.4.0-alpha.3/SHA256SUMS)
 
 ## CLI 产物
 
 | 系统 | CPU | Release asset |
 |---|---|---|
-| Linux | x86_64 | `apk-canary-1.4.0-alpha.2-linux-x86_64.tar.gz` |
-| macOS | Intel | `apk-canary-1.4.0-alpha.2-darwin-x86_64.tar.gz` |
-| macOS | Apple Silicon | `apk-canary-1.4.0-alpha.2-darwin-arm64.tar.gz` |
+| Linux | x86_64 | `apk-canary-1.4.0-alpha.3-linux-x86_64.tar.gz` |
+| macOS | Intel | `apk-canary-1.4.0-alpha.3-darwin-x86_64.tar.gz` |
+| macOS | Apple Silicon | `apk-canary-1.4.0-alpha.3-darwin-arm64.tar.gz` |
 
 独立 CLI 不要求本机安装 JDK、Android SDK、AAPT2 或 `apkanalyzer`。
 
@@ -29,7 +29,7 @@ APK Canary 读取 APK、同次构建的 `mapping.txt` 和带数字资源 ID 的 
 curl --fail --location --output install-apk-canary.sh \
   https://raw.githubusercontent.com/HelloVass/apk-canary/main/skills/apk-canary/scripts/install-cli.sh
 chmod +x install-apk-canary.sh
-./install-apk-canary.sh 1.4.0-alpha.2 "$HOME/.local/bin"
+./install-apk-canary.sh 1.4.0-alpha.3 "$HOME/.local/bin"
 $HOME/.local/bin/apk-canary --version
 ```
 
@@ -37,7 +37,7 @@ $HOME/.local/bin/apk-canary --version
 
 ## Agent Skill
 
-公开仓中的 [`skills/apk-canary`](skills/apk-canary/SKILL.md) 是唯一 Skill 分发源；Release 同时提供 `apk-canary-1.4.0-alpha.2-skills.tar.gz` 供离线安装。
+公开仓中的 [`skills/apk-canary`](skills/apk-canary/SKILL.md) 是唯一 Skill 分发源；Release 同时提供 `apk-canary-1.4.0-alpha.3-skills.tar.gz` 供离线安装。
 
 ### Codex
 

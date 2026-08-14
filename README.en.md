@@ -8,18 +8,18 @@ APK Canary reads an APK together with the matching `mapping.txt` and numeric-ID 
 
 ## Current release
 
-- Version: `1.4.0-alpha.2`
-- Source commit: `68426661d9bf55507ec5ffb9a8f1c439255dc051`
-- Release: [`v1.4.0-alpha.2`](https://github.com/HelloVass/apk-canary/releases/tag/v1.4.0-alpha.2)
-- Checksums: [`SHA256SUMS`](https://github.com/HelloVass/apk-canary/releases/download/v1.4.0-alpha.2/SHA256SUMS)
+- Version: `1.4.0-alpha.3`
+- Source commit: `84733b521845c9663b3f0ded360e0513871569ee`
+- Release: [`v1.4.0-alpha.3`](https://github.com/HelloVass/apk-canary/releases/tag/v1.4.0-alpha.3)
+- Checksums: [`SHA256SUMS`](https://github.com/HelloVass/apk-canary/releases/download/v1.4.0-alpha.3/SHA256SUMS)
 
 ## CLI artifacts
 
 | OS | CPU | Release asset |
 |---|---|---|
-| Linux | x86_64 | `apk-canary-1.4.0-alpha.2-linux-x86_64.tar.gz` |
-| macOS | Intel | `apk-canary-1.4.0-alpha.2-darwin-x86_64.tar.gz` |
-| macOS | Apple Silicon | `apk-canary-1.4.0-alpha.2-darwin-arm64.tar.gz` |
+| Linux | x86_64 | `apk-canary-1.4.0-alpha.3-linux-x86_64.tar.gz` |
+| macOS | Intel | `apk-canary-1.4.0-alpha.3-darwin-x86_64.tar.gz` |
+| macOS | Apple Silicon | `apk-canary-1.4.0-alpha.3-darwin-arm64.tar.gz` |
 
 The standalone CLI does not require a local JDK, Android SDK, AAPT2, or `apkanalyzer`.
 
@@ -29,7 +29,7 @@ The standalone CLI does not require a local JDK, Android SDK, AAPT2, or `apkanal
 curl --fail --location --output install-apk-canary.sh \
   https://raw.githubusercontent.com/HelloVass/apk-canary/main/skills/apk-canary/scripts/install-cli.sh
 chmod +x install-apk-canary.sh
-./install-apk-canary.sh 1.4.0-alpha.2 "$HOME/.local/bin"
+./install-apk-canary.sh 1.4.0-alpha.3 "$HOME/.local/bin"
 $HOME/.local/bin/apk-canary --version
 ```
 
@@ -37,7 +37,7 @@ The installer selects the current OS and CPU architecture, downloads the pinned 
 
 ## Agent Skill
 
-[`skills/apk-canary`](skills/apk-canary/SKILL.md) is the single Skill distribution source. Each Release also contains `apk-canary-1.4.0-alpha.2-skills.tar.gz` for offline installation.
+[`skills/apk-canary`](skills/apk-canary/SKILL.md) is the single Skill distribution source. Each Release also contains `apk-canary-1.4.0-alpha.3-skills.tar.gz` for offline installation.
 
 ### Codex
 
