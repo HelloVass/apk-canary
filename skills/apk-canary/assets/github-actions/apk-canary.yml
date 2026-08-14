@@ -1,0 +1,56 @@
+name: APK Canary
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  APK_CANARY_VERSION: "1.4.0-alpha.2"
+
+jobs:
+  analyze-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出源码
+        uses: actions/checkout@v6
+
+      - name: 配置 JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: 构建同次 APK 与符号文件
+        run: ./gradlew :app:stageReleaseArtifacts --build-cache --configuration-cache
+
+      - name: 安装 APK Canary
+        run: |
+          .github/scripts/install-apk-canary.sh \
+            "${APK_CANARY_VERSION}" \
+            build/tools/apk-canary
+
+      - name: 生成并执行包体卡口
+        run: |
+          build/tools/apk-canary/apk-canary analyze \
+            build/apk-canary/release/app-release.apk \
+            --mapping build/apk-canary/release/mapping.txt \
+            --r-txt build/apk-canary/release/R.txt \
+            --budget config/apk-canary/budget.json \
+            --product product-id \
+            --variant release \
+            --channel google-play \
+            --commit "${GITHUB_SHA}" \
+            --build-id "${GITHUB_RUN_ID}" \
+            --output build/reports/apk-canary/report.json
+
+      - name: 归档 JSON 报告
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: apk-canary-report
+          path: build/reports/apk-canary/report.json
+          if-no-files-found: error
