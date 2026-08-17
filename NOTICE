@@ -7,3 +7,13 @@ https://github.com/Tencent/matrix
 
 This project is independently maintained and is not affiliated with or endorsed
 by Tencent.
+
+APK Canary embeds bundletool-all 1.18.3, including its bundled AAPT2 binaries,
+for integrated Android App Bundle analysis.
+
+Android bundletool
+Copyright 2018 The Android Open Source Project
+Licensed under the Apache License, Version 2.0. The official bundletool-all
+LICENSE and NOTICE files are reproduced under third-party/bundletool in binary
+distributions.
+https://github.com/google/bundletool

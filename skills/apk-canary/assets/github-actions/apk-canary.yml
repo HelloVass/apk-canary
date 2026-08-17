@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 env:
-  APK_CANARY_VERSION: "1.4.0-alpha.3"
+  APK_CANARY_VERSION: "1.5.0-alpha.1"
 
 jobs:
   analyze-apk:

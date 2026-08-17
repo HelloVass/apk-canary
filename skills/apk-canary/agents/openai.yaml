@@ -1,4 +1,4 @@
 interface:
   display_name: "APK Canary"
-  short_description: "分析 Android 包体并接入本地与 CI 卡口"
-  default_prompt: "Use $apk-canary to analyze this Android release artifact and produce an actionable JSON-based size report."
+  short_description: "分析 APK/AAB 并交付 JSON 与 Markdown 包体报告"
+  default_prompt: "Use $apk-canary to analyze this APK or AAB and deliver compact JSON plus an actionable Markdown report."

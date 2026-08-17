@@ -4,22 +4,22 @@
 
 这是 APK Canary 的公开分发仓库。这里发布可独立运行的 Linux、macOS CLI、SHA-256 清单，以及同时兼容 Codex 与 Hermes Agent 的 APK 分析 Skill。
 
-APK Canary 读取 APK、同次构建的 `mapping.txt` 和带数字资源 ID 的 `R.txt`，生成适合 Agent 与 CI 消费的版本化紧凑 JSON。它覆盖 Manifest、ZIP 文件、DEX、资源、assets、PNG、Native Library、重复内容、基线变化和预算门禁；不生成 HTML，也不会在 CI 中替产品解释报告。
+APK Canary 读取 APK 或 AAB、同次构建的 `mapping.txt` 和带数字资源 ID 的 `R.txt`，生成适合 Agent 与 CI 消费的版本化紧凑 JSON。它把用户下载大小作为一级指标：APK 使用官方 apkanalyzer 等价的 gzip -9 估算，AAB 使用内嵌 bundletool 的 APKS 交付范围；文件自身和 Universal APK 大小只作为内容诊断。工具还覆盖 Manifest、ZIP 文件、DEX、资源、assets、PNG、Native Library、重复内容、基线变化和预算门禁。
 
 ## 当前版本
 
-- Version: `1.4.0-alpha.3`
-- Source commit: `84733b521845c9663b3f0ded360e0513871569ee`
-- Release: [`v1.4.0-alpha.3`](https://github.com/HelloVass/apk-canary/releases/tag/v1.4.0-alpha.3)
-- Checksums: [`SHA256SUMS`](https://github.com/HelloVass/apk-canary/releases/download/v1.4.0-alpha.3/SHA256SUMS)
+- Version: `1.5.0-alpha.1`
+- Source commit: `bd9b6f1c33d973fc46f0b85ed7083197ab36e965`
+- Release: [`v1.5.0-alpha.1`](https://github.com/HelloVass/apk-canary/releases/tag/v1.5.0-alpha.1)
+- Checksums: [`SHA256SUMS`](https://github.com/HelloVass/apk-canary/releases/download/v1.5.0-alpha.1/SHA256SUMS)
 
 ## CLI 产物
 
 | 系统 | CPU | Release asset |
 |---|---|---|
-| Linux | x86_64 | `apk-canary-1.4.0-alpha.3-linux-x86_64.tar.gz` |
-| macOS | Intel | `apk-canary-1.4.0-alpha.3-darwin-x86_64.tar.gz` |
-| macOS | Apple Silicon | `apk-canary-1.4.0-alpha.3-darwin-arm64.tar.gz` |
+| Linux | x86_64 | `apk-canary-1.5.0-alpha.1-linux-x86_64.tar.gz` |
+| macOS | Intel | `apk-canary-1.5.0-alpha.1-darwin-x86_64.tar.gz` |
+| macOS | Apple Silicon | `apk-canary-1.5.0-alpha.1-darwin-arm64.tar.gz` |
 
 独立 CLI 不要求本机安装 JDK、Android SDK、AAPT2 或 `apkanalyzer`。
 
@@ -29,7 +29,7 @@ APK Canary 读取 APK、同次构建的 `mapping.txt` 和带数字资源 ID 的 
 curl --fail --location --output install-apk-canary.sh \
   https://raw.githubusercontent.com/HelloVass/apk-canary/main/skills/apk-canary/scripts/install-cli.sh
 chmod +x install-apk-canary.sh
-./install-apk-canary.sh 1.4.0-alpha.3 "$HOME/.local/bin"
+./install-apk-canary.sh 1.5.0-alpha.1 "$HOME/.local/bin"
 $HOME/.local/bin/apk-canary --version
 ```
 
@@ -37,7 +37,9 @@ $HOME/.local/bin/apk-canary --version
 
 ## Agent Skill
 
-公开仓中的 [`skills/apk-canary`](skills/apk-canary/SKILL.md) 是唯一 Skill 分发源；Release 同时提供 `apk-canary-1.4.0-alpha.3-skills.tar.gz` 供离线安装。
+公开仓中的 [`skills/apk-canary`](skills/apk-canary/SKILL.md) 是唯一 Skill 分发源；Release 同时提供 `apk-canary-1.5.0-alpha.1-skills.tar.gz` 供离线安装。
+
+Skill 会编排本地路径或下载链接形式的 APK/AAB：准备同次 mapping 与 `R.txt`、调用 CLI 生成紧凑 JSON、校验报告后按固定模板交付 Markdown 分析文档。JSON 仍是唯一机器协议和 CI 门禁输入；Markdown 用于向研发解释下载大小、组成、变化、候选风险与优化优先级。
 
 ### Codex
 
@@ -64,7 +66,7 @@ hermes skills install HelloVass/apk-canary/apk-canary
 hermes skills install HelloVass/apk-canary/skills/apk-canary
 ```
 
-## 分析 APK
+## 分析 APK 或 AAB
 
 ```shell
 apk-canary analyze app-release.apk \
@@ -76,10 +78,20 @@ apk-canary analyze app-release.apk \
   --output build/reports/apk-canary/report.json
 ```
 
+AAB 使用同一个命令，无需另装 bundletool、AAPT2 或 JDK：
+
+```shell
+apk-canary analyze app-release.aab \
+  --mapping mapping.txt \
+  --r-txt R.txt \
+  --device-spec device-spec.json \
+  --output build/reports/apk-canary/report.json
+```
+
 - `mapping.txt` 用于恢复 R8/ProGuard 混淆前的类身份。
 - 数值 `R.txt` 用于按资源 ID 恢复原始资源名并识别 shrinker 删除项。
 - AGP `resources.txt` 不是输入。
-- 当前原生分析对象是 APK。Skill 提供 AAB→Universal APK 的过渡流程，但它不等于原生 AAB/APKS 或 Play 下载体积分析。
+- APK 与 AAB 都先读取 `delivery.downloadSize`。APK 是 gzip -9 单值估算；AAB 是 bundletool 基于 Split APK 的预计压缩下载范围。`summary.apkBytes` 只是 APK 文件或 Universal APK 文件大小，不能替代用户下载大小。
 
 ## 校验产物
 
@@ -89,4 +101,4 @@ shasum -a 256 -c SHA256SUMS
 
 ## 许可与归属
 
-APK Canary 是受 Tencent Matrix APKChecker 启发的 Kotlin 重写。分发内容遵循 [BSD 3-Clause License](LICENSE)，上游归属与项目关系见 [NOTICE](NOTICE)。本项目由社区独立维护，不隶属于腾讯，也未获得腾讯背书。
+APK Canary 是受 Tencent Matrix APKChecker 启发的 Kotlin 重写。项目代码遵循 [BSD 3-Clause License](LICENSE)，上游及内嵌 bundletool 归属见 [NOTICE](NOTICE)；独立 CLI 包同时附带 bundletool 的原始 LICENSE 与 NOTICE。本项目由社区独立维护，不隶属于腾讯或 Google，也未获得其背书。

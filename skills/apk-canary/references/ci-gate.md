@@ -36,6 +36,8 @@ APK Canary 分析与预算
 
 - 初次接入先生成稳定版本报告，再从真实数据建立产品预算。
 - baseline 必须匹配 product、variant 和 channel。
+- 一级预算使用 `maxDownloadBytes`，增长预算使用 `comparison.download`；`maxApkBytes` 仅作为原始 APK 或 Universal APK 辅助约束。
+- 旧 baseline 没有 `delivery.downloadSize` 时应重新生成，不能回退到文件大小执行下载增长门禁。
 - 预算配置属于产品仓库，CLI 不硬编码业务阈值。
 - 绝对大小、相对增长、DEX、资源、assets 和 SO 门禁可以同时使用。
 - 静态候选优先设置“不得新增”预算，不要把候选直接当作可删除文件。
@@ -51,10 +53,10 @@ APK Canary 分析与预算
 - Git commit 与 CI run ID。
 - 当前报告。
 - 作为比较输入的 baseline 标识。
-- AAB 过渡路径下的原始 AAB SHA-256。
+- AAB 报告中的原始 AAB、可选设备规格和派生制品指纹。
 
 APK Canary Release 位于公开分发仓库，产品 CI 不需要额外的 GitHub token。安装器通过匿名 HTTPS 下载固定版本并校验 `SHA256SUMS`；如果 runner 已有通过认证的 `gh`，也可以复用它，但不得因此跳过哈希校验。
 
 ## 发布制品
 
-当前 CLI 原生支持 APK。AAB-only 产品可以先用 bundletool 生成 Universal APK 执行 Matrix 风格的内容卡口，但不能据此声明 Play 下载体积。需要设备级体积时，等待原生 AAB/APKS 聚合能力，或单独使用 bundletool 的设备规格估算并明确口径。
+当前 CLI 直接支持 APK 与 AAB 输入，并统一输出 `delivery.downloadSize`。APK 使用 gzip -9 单值估算；AAB 由内嵌 bundletool 生成默认 APKS 下载范围与 Universal APK 内容报告，可以用 `--device-spec` 获取设备级估算。不能把 APK/AAB 文件或 Universal APK 的 `summary.apkBytes` 声明为用户下载体积。模块级动态 Feature/Asset Pack 归因仍需后续能力。
