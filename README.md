@@ -8,18 +8,18 @@ APK Canary 读取 APK 或 AAB、同次构建的 `mapping.txt` 和带数字资源
 
 ## 当前版本
 
-- Version: `1.5.0-alpha.1`
-- Source commit: `bd9b6f1c33d973fc46f0b85ed7083197ab36e965`
-- Release: [`v1.5.0-alpha.1`](https://github.com/HelloVass/apk-canary/releases/tag/v1.5.0-alpha.1)
-- Checksums: [`SHA256SUMS`](https://github.com/HelloVass/apk-canary/releases/download/v1.5.0-alpha.1/SHA256SUMS)
+- Version: `1.5.0-alpha.2`
+- Source commit: `f501db954e4daa855009226a2cdd8cd494686ab8`
+- Release: [`v1.5.0-alpha.2`](https://github.com/HelloVass/apk-canary/releases/tag/v1.5.0-alpha.2)
+- Checksums: [`SHA256SUMS`](https://github.com/HelloVass/apk-canary/releases/download/v1.5.0-alpha.2/SHA256SUMS)
 
 ## CLI 产物
 
 | 系统 | CPU | Release asset |
 |---|---|---|
-| Linux | x86_64 | `apk-canary-1.5.0-alpha.1-linux-x86_64.tar.gz` |
-| macOS | Intel | `apk-canary-1.5.0-alpha.1-darwin-x86_64.tar.gz` |
-| macOS | Apple Silicon | `apk-canary-1.5.0-alpha.1-darwin-arm64.tar.gz` |
+| Linux | x86_64 | `apk-canary-1.5.0-alpha.2-linux-x86_64.tar.gz` |
+| macOS | Intel | `apk-canary-1.5.0-alpha.2-darwin-x86_64.tar.gz` |
+| macOS | Apple Silicon | `apk-canary-1.5.0-alpha.2-darwin-arm64.tar.gz` |
 
 独立 CLI 不要求本机安装 JDK、Android SDK、AAPT2 或 `apkanalyzer`。
 
@@ -29,21 +29,44 @@ APK Canary 读取 APK 或 AAB、同次构建的 `mapping.txt` 和带数字资源
 curl --fail --location --output install-apk-canary.sh \
   https://raw.githubusercontent.com/HelloVass/apk-canary/main/skills/apk-canary/scripts/install-cli.sh
 chmod +x install-apk-canary.sh
-./install-apk-canary.sh 1.5.0-alpha.1 "$HOME/.local/bin"
+./install-apk-canary.sh 1.5.0-alpha.2 "$HOME/.local/bin"
 $HOME/.local/bin/apk-canary --version
 ```
 
 安装脚本根据当前系统选择 CPU 架构，下载固定版本，并在安装前验证 `SHA256SUMS`。
 
+安装完成后，Native CLI 可以检查或升级自身；自动模式按 SemVer 只升级、不降级，显式 `--version` 才允许
+切换旧版本。每次仍会下载并验证 Release 的 `SHA256SUMS`，且只在候选二进制版本校验成功后执行原子替换：
+
+```shell
+apk-canary update --check
+apk-canary update
+apk-canary update --version 1.5.0-alpha.2
+```
+
 ## Agent Skill
 
-公开仓中的 [`skills/apk-canary`](skills/apk-canary/SKILL.md) 是唯一 Skill 分发源；Release 同时提供 `apk-canary-1.5.0-alpha.1-skills.tar.gz` 供离线安装。
+公开仓中的 [`skills/apk-canary`](skills/apk-canary/SKILL.md) 是唯一 Skill 分发源；Release 同时提供 `apk-canary-1.5.0-alpha.2-skills.tar.gz` 供离线安装。
 
 Skill 会编排本地路径或下载链接形式的 APK/AAB：准备同次 mapping 与 `R.txt`、调用 CLI 生成紧凑 JSON、校验报告后按固定模板交付 Markdown 分析文档。JSON 仍是唯一机器协议和 CI 门禁输入；Markdown 用于向研发解释下载大小、组成、变化、候选风险与优化优先级。
 
+### CLI 直接安装（推荐）
+
+把与 CLI 同版本的完整 Skill 安装到当前项目，或安装到用户级共享 Agent Skills 目录：
+
+```shell
+apk-canary init .
+apk-canary skills install --user
+apk-canary skills list
+```
+
+项目级路径为 `.agents/skills/apk-canary`，用户级路径为 `~/.agents/skills/apk-canary`。CLI 下载同版本
+`apk-canary-1.5.0-alpha.2-skills.tar.gz` 并验证 `SHA256SUMS`。受管元数据会记录内容摘要；升级或删除若发现
+目录不是 CLI 创建，或安装后已被人工修改，会拒绝覆盖，只有显式 `--force` 才继续。
+
 ### Codex
 
-在 Codex 中让 Skill Installer 安装以下公开目录：
+不方便先安装 CLI 时，也可在 Codex 中让 Skill Installer 安装以下公开目录：
 
 ```text
 使用 $skill-installer 安装 https://github.com/HelloVass/apk-canary/tree/main/skills/apk-canary
@@ -53,7 +76,7 @@ Skill 会编排本地路径或下载链接形式的 APK/AAB：准备同次 mappi
 
 ### Hermes Agent
 
-把仓库作为 Hermes tap 添加后安装：
+不使用 CLI 受管安装时，可把仓库作为 Hermes tap 添加后安装：
 
 ```shell
 hermes skills tap add HelloVass/apk-canary

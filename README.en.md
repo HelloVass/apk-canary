@@ -8,18 +8,18 @@ APK Canary reads an APK or AAB together with the matching `mapping.txt` and nume
 
 ## Current release
 
-- Version: `1.5.0-alpha.1`
-- Source commit: `bd9b6f1c33d973fc46f0b85ed7083197ab36e965`
-- Release: [`v1.5.0-alpha.1`](https://github.com/HelloVass/apk-canary/releases/tag/v1.5.0-alpha.1)
-- Checksums: [`SHA256SUMS`](https://github.com/HelloVass/apk-canary/releases/download/v1.5.0-alpha.1/SHA256SUMS)
+- Version: `1.5.0-alpha.2`
+- Source commit: `f501db954e4daa855009226a2cdd8cd494686ab8`
+- Release: [`v1.5.0-alpha.2`](https://github.com/HelloVass/apk-canary/releases/tag/v1.5.0-alpha.2)
+- Checksums: [`SHA256SUMS`](https://github.com/HelloVass/apk-canary/releases/download/v1.5.0-alpha.2/SHA256SUMS)
 
 ## CLI artifacts
 
 | OS | CPU | Release asset |
 |---|---|---|
-| Linux | x86_64 | `apk-canary-1.5.0-alpha.1-linux-x86_64.tar.gz` |
-| macOS | Intel | `apk-canary-1.5.0-alpha.1-darwin-x86_64.tar.gz` |
-| macOS | Apple Silicon | `apk-canary-1.5.0-alpha.1-darwin-arm64.tar.gz` |
+| Linux | x86_64 | `apk-canary-1.5.0-alpha.2-linux-x86_64.tar.gz` |
+| macOS | Intel | `apk-canary-1.5.0-alpha.2-darwin-x86_64.tar.gz` |
+| macOS | Apple Silicon | `apk-canary-1.5.0-alpha.2-darwin-arm64.tar.gz` |
 
 The standalone CLI does not require a local JDK, Android SDK, AAPT2, or `apkanalyzer`.
 
@@ -29,21 +29,45 @@ The standalone CLI does not require a local JDK, Android SDK, AAPT2, or `apkanal
 curl --fail --location --output install-apk-canary.sh \
   https://raw.githubusercontent.com/HelloVass/apk-canary/main/skills/apk-canary/scripts/install-cli.sh
 chmod +x install-apk-canary.sh
-./install-apk-canary.sh 1.5.0-alpha.1 "$HOME/.local/bin"
+./install-apk-canary.sh 1.5.0-alpha.2 "$HOME/.local/bin"
 $HOME/.local/bin/apk-canary --version
 ```
 
 The installer selects the current OS and CPU architecture, downloads the pinned version, and verifies `SHA256SUMS` before installation.
 
+After installation, the Native CLI can check or update itself. Automatic mode follows SemVer and never downgrades; only
+an explicit `--version` can select an older release. Every update still downloads and verifies the Release `SHA256SUMS`,
+validates the candidate binary, and then performs an atomic replacement:
+
+```shell
+apk-canary update --check
+apk-canary update
+apk-canary update --version 1.5.0-alpha.2
+```
+
 ## Agent Skill
 
-[`skills/apk-canary`](skills/apk-canary/SKILL.md) is the single Skill distribution source. Each Release also contains `apk-canary-1.5.0-alpha.1-skills.tar.gz` for offline installation.
+[`skills/apk-canary`](skills/apk-canary/SKILL.md) is the single Skill distribution source. Each Release also contains `apk-canary-1.5.0-alpha.2-skills.tar.gz` for offline installation.
 
 The Skill orchestrates an APK/AAB supplied as a local path or download URL: prepare matching mapping and `R.txt` inputs, run the CLI to preserve compact JSON, validate it, and deliver a structured Markdown analysis from the bundled template. JSON remains the only machine protocol and CI gate input; Markdown explains download size, composition, changes, candidate risks, and optimization priorities to developers.
 
+### Install directly with the CLI (recommended)
+
+Install the complete version-matched Skill into the current project or the shared user-level Agent Skills directory:
+
+```shell
+apk-canary init .
+apk-canary skills install --user
+apk-canary skills list
+```
+
+Project scope uses `.agents/skills/apk-canary`; user scope uses `~/.agents/skills/apk-canary`. The CLI downloads
+`apk-canary-1.5.0-alpha.2-skills.tar.gz` and verifies `SHA256SUMS`. Managed metadata records a content digest, so later
+updates or removals refuse to overwrite unmanaged or locally modified files unless the user explicitly passes `--force`.
+
 ### Codex
 
-Ask Skill Installer in Codex to install the public directory:
+If bootstrapping the CLI first is not practical, ask Skill Installer in Codex to install the public directory:
 
 ```text
 Use $skill-installer to install https://github.com/HelloVass/apk-canary/tree/main/skills/apk-canary
@@ -53,7 +77,7 @@ For a project-local installation, copy the directory to `.agents/skills/apk-cana
 
 ### Hermes Agent
 
-Add this repository as a Hermes tap, then install the Skill:
+When not using the CLI-managed installation, add this repository as a Hermes tap and install the Skill:
 
 ```shell
 hermes skills tap add HelloVass/apk-canary

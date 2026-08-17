@@ -41,11 +41,22 @@ Never present Universal APK content totals as a single-device Play download.
 Prefer a pinned GitHub Release and verify `SHA256SUMS`. Run:
 
 ```shell
-scripts/install-cli.sh 1.5.0-alpha.1 build/tools/apk-canary
+scripts/install-cli.sh 1.5.0-alpha.2 build/tools/apk-canary
 build/tools/apk-canary/apk-canary --version
 ```
 
 The installer downloads the pinned public GitHub Release and verifies `SHA256SUMS`. It prefers an authenticated `gh` client when available and otherwise uses anonymous HTTPS.
+
+After bootstrapping a standalone CLI, use its built-in lifecycle commands instead of manually copying Skill files:
+
+```shell
+build/tools/apk-canary/apk-canary update --check
+build/tools/apk-canary/apk-canary skills install --project .
+```
+
+`apk-canary init .` is the project-initialization shortcut. `skills install --user` installs to the shared user-level
+`~/.agents/skills/apk-canary` directory. Managed installs record a content digest and refuse to overwrite or remove local
+changes unless the user explicitly passes `--force`.
 
 When working inside the APK Canary source repository, build the local distribution instead:
 
@@ -99,6 +110,7 @@ Keep the sequence strict:
 ## Complete the task
 
 - Confirm `apk-canary --version` and report `tool.version` match the pinned version.
+- When maintaining a long-lived installation, run `apk-canary update --check`; only the standalone Native CLI can replace itself.
 - Confirm `schemaVersion`, artifact identity, input fingerprints, rule statuses, and diagnostics before discussing size findings.
 - For interactive APK/AAB analysis, deliver the original JSON and a fully populated Markdown analysis with no template placeholders.
 - Report which checks are deterministic and which findings require product review.
